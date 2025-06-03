@@ -36,6 +36,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
+    permissions:  # new change made
+      id-token: write   # Benötigt für Azure OIDC-Login
+      contents: read    # Benötigt für actions/download-artifact
 
     steps:
       - name: Download artifact
