@@ -2,4 +2,5 @@ fastapi
 uvicorn
 stable-baselines3
 numpy
+shimmy
 
