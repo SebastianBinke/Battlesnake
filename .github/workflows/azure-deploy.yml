@@ -25,13 +25,13 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Zip for deployment
-        run: zip -r snake_model.zip
+        run: zip -r release.zip
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: python-app
-          path: battlesnake-server/snake_model.zip
+          path: battlesnake-server/release.zip
 
   deploy:
     runs-on: ubuntu-latest
