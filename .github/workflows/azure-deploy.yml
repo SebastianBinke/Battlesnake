@@ -34,31 +34,35 @@ jobs:
           path: release.zip
 
   deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    permissions:  # new change made
-      id-token: write   # Benötigt für Azure OIDC-Login
-      contents: read    # Benötigt für actions/download-artifact
+      runs-on: ubuntu-latest
+      needs: build
+      environment:
+        name: 'Production'
+        url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      permissions:
+        id-token: write #This is required for requesting the JWT
+        contents: read #This is required for actions/checkout
 
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: python-app
+      steps:
+        - name: Download artifact from build job
+          uses: actions/download-artifact@v4
+          with:
+            name: python-app
 
-      - name: Unzip artifact
-        run: unzip release.zip
+        - name: Unzip artifact for deployment
+          run: unzip release.zip
 
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        
+        - name: Login to Azure
+          uses: azure/login@v2
+          with:
+            client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_A8759ABE6DB24018855B9D60A7B42F6F }}
+            tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_DF0A18DF8CAA489BB1A0BDC78705FEA5 }}
+            subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_2E1091A976F6453C9A171A794CAB5F31 }}
 
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: 'ml-battlesnake'
-          slot-name: 'Production'
-          package: .
+        - name: 'Deploy to Azure Web App'
+          uses: azure/webapps-deploy@v3
+          id: deploy-to-webapp
+          with:
+            app-name: 'ml-battlesnake'
+            slot-name: 'Production'
