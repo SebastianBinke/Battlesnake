@@ -1,10 +1,9 @@
 import os
-import gym
+from environment import SnakeEnv
 from stable_baselines3 import PPO
-from stable_baselines3.common.env_util import make_vec_env
 
 # 1. Environment
-env = make_vec_env('battlesnake-v0', n_envs=4)
+env = SnakeEnv()
 
 # 2. Model
 model = PPO('MlpPolicy', env, verbose=1)
