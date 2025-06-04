@@ -27,7 +27,7 @@ jobs:
       - name: Zip for deployment
         run: |
           cd battlesnake-server
-          zip -r ../release.zip . -x '__pycache__/*'
+          zip -r ../release.zip main.py load_model.py requirements.txt snake_model.zip .gitignore
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -69,4 +69,3 @@ jobs:
             app-name: 'ml-battlesnake'
             slot-name: 'Production'
             package: release.zip
-            runtime: 'python|3.11'
