@@ -61,6 +61,15 @@ jobs:
             client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_A8759ABE6DB24018855B9D60A7B42F6F }}
             tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_DF0A18DF8CAA489BB1A0BDC78705FEA5 }}
             subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_2E1091A976F6453C9A171A794CAB5F31 }}
+        
+        - name: Set app settings to disable Oryx
+          uses: azure/CLI@v1
+          with:
+            inlineScript: |
+              az webapp config appsettings set \
+                --name ml-battlesnake \
+                --resource-group Battlesnake \
+                --settings ENABLE_ORYX_BUILD=false SCM_DO_BUILD_DURING_DEPLOYMENT=false
 
         - name: 'Deploy to Azure Web App'
           uses: azure/webapps-deploy@v3

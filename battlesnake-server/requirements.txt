@@ -2,5 +2,5 @@ fastapi
 uvicorn
 stable-baselines3
 numpy
-shimmy
+shimmy>=2.0.0
 
